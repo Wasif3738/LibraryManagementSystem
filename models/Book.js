@@ -30,6 +30,8 @@ const Book = sequelize.define('Book', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+}, {
+    timestamps: false, // Disable createdAt and updatedAt
 });
 
 module.exports = Book;
