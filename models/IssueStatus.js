@@ -2,12 +2,14 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const Customer = require('./Customer'); // Import related model
 const Book = require('./Book'); // Import related model
+const { v4: uuidv4 } = require('uuid'); // Import UUID for auto-generation
 
 const IssueStatus = sequelize.define('IssueStatus', {
     Issue_Id: {
         type: DataTypes.STRING,
         primaryKey: true,
         allowNull: false,
+        defaultValue: () => uuidv4(),//Automatically generate a unique ID
     },
     Issued_cust: {
         type: DataTypes.STRING,
@@ -31,6 +33,9 @@ const IssueStatus = sequelize.define('IssueStatus', {
             key: 'ISBN',
         },
     },
-});
+}, {
+    timestamps: true, // Enable automatic handling of createdAt and updatedAt
+}
+);
 
 module.exports = IssueStatus;
