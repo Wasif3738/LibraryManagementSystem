@@ -1,17 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const ReturnStatus = require('../models/ReturnStatus'); // Sequelize model for ReturnStatus
+const IssueStatus = require('../models/IssueStatus'); // Sequelize model for IssueStatus
 
 // Log a book return
 router.post('/returns', async (req, res) => {
     try {
         const { Return_cust, Return_book_name, Return_date, Isbn_book2 } = req.body;
 
-        // Check if all required fields are provided (exclude Return_Id since it's auto-generated)
+        // Check if all required fields are provided
         if (!Return_book_name || !Return_date) {
             return res.status(400).json({
                 error: 'Missing required fields',
                 details: 'Please provide Return_book_name and Return_date',
+            });
+        }
+
+        // Validate if the book is actually issued
+        const issuedBook = await IssueStatus.findOne({
+            where: {
+                Issued_cust: Return_cust,
+                Issued_book_name: Return_book_name,
+            },
+        });
+
+        if (!issuedBook) {
+            return res.status(400).json({
+                error: 'Book not found in issued list',
+                details: `The book "${Return_book_name}" was not issued to the customer.`,
             });
         }
 
@@ -23,48 +39,17 @@ router.post('/returns', async (req, res) => {
             Isbn_book2,
         });
 
+        // Remove the book from the IssueStatus table
+        await issuedBook.destroy();
+
         res.status(201).json({
-            message: 'Return logged successfully',
+            message: 'Return logged successfully, and book removed from issued list',
             returnRecord,
         });
     } catch (error) {
         console.error('Error logging return:', error);
         res.status(500).json({
             error: 'Failed to log return',
-            details: error.message,
-        });
-    }
-});
-
-// Fetch all return records
-router.get('/returns', async (req, res) => {
-    try {
-        const returns = await ReturnStatus.findAll();
-        res.status(200).json(returns);
-    } catch (error) {
-        console.error('Error fetching returns:', error);
-        res.status(500).json({
-            error: 'Failed to fetch return records',
-            details: error.message,
-        });
-    }
-});
-
-// Fetch return records for a specific customer
-router.get('/returns/customer/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const returns = await ReturnStatus.findAll({ where: { Return_cust: id } });
-
-        if (returns.length === 0) {
-            return res.status(404).json({ error: 'No return records found for this customer' });
-        }
-
-        res.status(200).json(returns);
-    } catch (error) {
-        console.error('Error fetching customer returns:', error);
-        res.status(500).json({
-            error: 'Failed to fetch customer return records',
             details: error.message,
         });
     }

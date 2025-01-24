@@ -15,17 +15,28 @@ router.post('/issues', async (req, res) => {
             });
         }
 
-        // Create the issue record
-        const issueRecord = await IssueStatus.create({
-            Issued_cust,
-            Issued_book_name,
-            Issue_date,
-            Isbn_book,
+        // Ensure the book exists before adding to IssueStatus
+        const existingBook = await IssueStatus.findOne({
+            where: { Isbn_book },
         });
 
-        res.status(201).json({
-            message: 'Book issued successfully',
-            issueRecord,
+        if (!existingBook) {
+            const issueRecord = await IssueStatus.create({
+                Issued_cust,
+                Issued_book_name,
+                Issue_date,
+                Isbn_book,
+            });
+
+            return res.status(201).json({
+                message: 'Book issued successfully',
+                issueRecord,
+            });
+        }
+
+        res.status(400).json({
+            error: 'Book already issued',
+            details: `The book with ISBN ${Isbn_book} is already issued.`,
         });
     } catch (error) {
         console.error('Error issuing book:', error);
