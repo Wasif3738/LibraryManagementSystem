@@ -2,23 +2,21 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const Branch = sequelize.define('Branch', {
-    Branch_no: {
+    Branch_Id: {
         type: DataTypes.STRING,
         primaryKey: true,
         allowNull: false,
     },
-    Manager_id: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    Branch_address: {
+    Branch_name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    Contact_no: {
+    Branch_location: {
         type: DataTypes.STRING,
         allowNull: false,
     },
+}, {
+    timestamps: false, // Disable createdAt and updatedAt
 });
 
 module.exports = Branch;
