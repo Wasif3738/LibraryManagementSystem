@@ -115,3 +115,15 @@ The project includes various SQL queries and data analysis tasks to extract valu
      GET http://localhost:5000/api/customers
    - **Description:**
      This will list all customers along with their `Customer_Id`. Look for the `Customer_Id` field in the response JSON.
+
+## SQL Scripts
+This project includes SQL scripts for database management:
+- `sql-scripts/schema.sql`: Defines the database schema.
+- `sql-scripts/sample_data.sql`: Populates the database with sample data.
+- `sql-scripts/queries.sql`: Demonstrates common queries for the application.
+
+To execute these scripts:
+1. Open MySQL Workbench or any SQL editor.
+2. Run `schema.sql` to create tables.
+3. Run `sample_data.sql` to insert sample data.
+4. Use `queries.sql` to interact with the database.
