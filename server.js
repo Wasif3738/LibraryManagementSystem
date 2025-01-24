@@ -4,6 +4,7 @@ const bookRoutes = require('./routes/bookRoutes'); // Import book routes
 const customerRoutes = require('./routes/customerRoutes'); // Import customer routes
 const returnRoutes = require('./routes/returnRoutes'); // Import return routes
 const issueRoutes = require('./routes/issueRoutes'); // Import issue routes
+const employeeRoutes = require('./routes/employeeRoutes'); // Import employee routes
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.use('/api', bookRoutes); // Mount book routes at '/api'
 app.use('/api', customerRoutes); // Mount customer routes at '/api'
 app.use('/api', returnRoutes); // Mount return routes at '/api'
 app.use('/api', issueRoutes); // Mount issue routes at '/api'
+app.use('/api', employeeRoutes); // Mount employee routes at '/api'
+
 
 
 // Test database connection
