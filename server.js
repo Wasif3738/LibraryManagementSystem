@@ -2,6 +2,7 @@ const express = require('express');
 const sequelize = require('./config/database');
 const bookRoutes = require('./routes/bookRoutes'); // Import the book routes
 const customerRoutes = require('./routes/customerRoutes'); // Import the customer routes
+const returnRoutes = require('./routes/returnRoutes'); // Import the return routes
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.json()); // Parse JSON requests
 // Use routes
 app.use('/api', bookRoutes); // Mount book routes at '/api'
 app.use('/api', customerRoutes); // Mount customer routes at '/api'
+app.use('/api', returnRoutes); // Mount return routes at '/api'
 
 // Test database connection
 sequelize
