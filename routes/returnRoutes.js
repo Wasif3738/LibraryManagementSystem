@@ -5,19 +5,18 @@ const ReturnStatus = require('../models/ReturnStatus'); // Sequelize model for R
 // Log a book return
 router.post('/returns', async (req, res) => {
     try {
-        const { Return_Id, Return_cust, Return_book_name, Return_date, Isbn_book2 } = req.body;
+        const { Return_cust, Return_book_name, Return_date, Isbn_book2 } = req.body;
 
-        //check if all required fields are provided
-        if (!Return_Id || !Return_book_name || !Return_date) {
+        // Check if all required fields are provided (exclude Return_Id since it's auto-generated)
+        if (!Return_book_name || !Return_date) {
             return res.status(400).json({
                 error: 'Missing required fields',
-                details: 'Please provide Return_Id, Return_book_name, and Return_date',
+                details: 'Please provide Return_book_name and Return_date',
             });
         }
 
         // Create the return record
         const returnRecord = await ReturnStatus.create({
-            Return_Id,
             Return_cust,
             Return_book_name,
             Return_date,
