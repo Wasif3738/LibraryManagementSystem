@@ -3,7 +3,7 @@ CREATE TABLE Books (
     Book_title VARCHAR(255) NOT NULL,
     Category VARCHAR(50) NOT NULL,
     Rental_Price DECIMAL(10, 2) NOT NULL,
-    Status ENUM('Yes', 'No') NOT NULL,
+    Status VARCHAR(3) NOT NULL CHECK (Status IN ('Yes', 'No')),
     Author VARCHAR(255),
     Publisher VARCHAR(255)
 );
