@@ -1,49 +1,51 @@
 const express = require('express');
 const router = express.Router();
-const Branch = require('../models/Branch'); // Sequelize model for Branch
+const Employee = require('../models/Employee'); // Sequelize model for Employee
 
-// Add a new branch
-router.post('/branches', async (req, res) => {
+// Add a new employee
+router.post('/employees', async (req, res) => {
     try {
-        const { Branch_Id, Branch_name, Branch_location } = req.body;
+        const { Emp_id, Emp_name, Position, Salary, Branch_no } = req.body;
 
         // Validate required fields
-        if (!Branch_Id || !Branch_name || !Branch_location) {
+        if (!Emp_id || !Emp_name || !Position || !Salary || !Branch_no) {
             return res.status(400).json({
                 error: 'Missing required fields',
-                details: 'Please provide Branch_Id, Branch_name, and Branch_location',
+                details: 'Please provide Emp_id, Emp_name, Position, Salary, and Branch_no',
             });
         }
 
-        // Create the branch record
-        const branch = await Branch.create({
-            Branch_Id,
-            Branch_name,
-            Branch_location,
+        // Create the employee record
+        const employee = await Employee.create({
+            Emp_id,
+            Emp_name,
+            Position,
+            Salary,
+            Branch_no,
         });
 
         res.status(201).json({
-            message: 'Branch added successfully',
-            branch,
+            message: 'Employee added successfully',
+            employee,
         });
     } catch (error) {
-        console.error('Error adding branch:', error);
+        console.error('Error adding employee:', error);
         res.status(500).json({
-            error: 'Failed to add branch',
+            error: 'Failed to add employee',
             details: error.message,
         });
     }
 });
 
-// Fetch all branches
-router.get('/branches', async (req, res) => {
+// **Fix: Fetch all employees (GET request)**
+router.get('/employees', async (req, res) => {
     try {
-        const branches = await Branch.findAll();
-        res.status(200).json(branches);
+        const employees = await Employee.findAll();
+        res.status(200).json(employees);
     } catch (error) {
-        console.error('Error fetching branches:', error);
+        console.error('Error fetching employees:', error);
         res.status(500).json({
-            error: 'Failed to fetch branches',
+            error: 'Failed to fetch employees',
             details: error.message,
         });
     }
