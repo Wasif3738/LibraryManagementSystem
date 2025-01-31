@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const Employee = require('../models/Employee'); // Sequelize model for Employee
+const Employee = require('../models/Employee');
+const Branch = require('../models/Branch'); // Ensure Branch model is imported
 
 // Add a new employee
 router.post('/employees', async (req, res) => {
     try {
         const { Emp_id, Emp_name, Position, Salary, Branch_no } = req.body;
 
-        // Validate required fields
         if (!Emp_id || !Emp_name || !Position || !Salary || !Branch_no) {
             return res.status(400).json({
                 error: 'Missing required fields',
@@ -15,7 +15,16 @@ router.post('/employees', async (req, res) => {
             });
         }
 
-        // Create the employee record
+        // Ensure branch exists
+        const branchExists = await Branch.findOne({ where: { Branch_Id: Branch_no } });
+        if (!branchExists) {
+            return res.status(400).json({
+                error: 'Invalid Branch_no',
+                details: `Branch with ID ${Branch_no} does not exist.`,
+            });
+        }
+
+        // Create employee
         const employee = await Employee.create({
             Emp_id,
             Emp_name,
