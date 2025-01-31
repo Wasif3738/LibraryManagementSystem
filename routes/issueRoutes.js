@@ -47,4 +47,18 @@ router.post('/issues', async (req, res) => {
     }
 });
 
+// **Fix: Fetch all issued books (GET request)**
+router.get('/issues', async (req, res) => {
+    try {
+        const issues = await IssueStatus.findAll();
+        res.status(200).json(issues);
+    } catch (error) {
+        console.error('Error fetching issued books:', error);
+        res.status(500).json({
+            error: 'Failed to fetch issued books',
+            details: error.message,
+        });
+    }
+});
+
 module.exports = router;
