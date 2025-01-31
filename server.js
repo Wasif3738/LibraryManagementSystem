@@ -1,25 +1,32 @@
 const express = require('express');
+const cors = require('cors'); // Import CORS
 const sequelize = require('./config/database');
-const bookRoutes = require('./routes/bookRoutes'); // Import book routes
-const customerRoutes = require('./routes/customerRoutes'); // Import customer routes
-const returnRoutes = require('./routes/returnRoutes'); // Import return routes
-const issueRoutes = require('./routes/issueRoutes'); // Import issue routes
-const employeeRoutes = require('./routes/employeeRoutes'); // Import employee routes
-const branchRoutes = require('./routes/branchRoutes'); // Import branch routes
+const bookRoutes = require('./routes/bookRoutes');
+const customerRoutes = require('./routes/customerRoutes');
+const returnRoutes = require('./routes/returnRoutes');
+const issueRoutes = require('./routes/issueRoutes');
+const employeeRoutes = require('./routes/employeeRoutes');
+const branchRoutes = require('./routes/branchRoutes');
 
 const app = express();
 
+// Enable CORS
+app.use(cors({
+    origin: 'http://localhost:3000', // Allow frontend requests
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type']
+}));
+
 // Middleware
-app.use(express.json()); // Parse JSON requests
+app.use(express.json());
 
 // Use routes
-app.use('/api', bookRoutes); // Mount book routes at '/api'
-app.use('/api', customerRoutes); // Mount customer routes at '/api'
-app.use('/api', returnRoutes); // Mount return routes at '/api'
-app.use('/api', issueRoutes); // Mount issue routes at '/api'
-app.use('/api', employeeRoutes); // Mount employee routes at '/api'
-app.use('/api', branchRoutes); // Mount branch routes at '/api'
-
+app.use('/api', bookRoutes);
+app.use('/api', customerRoutes);
+app.use('/api', returnRoutes);
+app.use('/api', issueRoutes);
+app.use('/api', employeeRoutes);
+app.use('/api', branchRoutes);
 
 // Test database connection
 sequelize
@@ -27,9 +34,8 @@ sequelize
     .then(() => console.log('Database connected...'))
     .catch(err => console.error('Error: ', err));
 
-// Sync database
 sequelize
-    .sync({ force: false }) // Sync tables, don't drop existing ones
+    .sync({ force: false })
     .then(() => console.log('Tables synced...'))
     .catch(err => console.error('Error syncing tables: ', err));
 
