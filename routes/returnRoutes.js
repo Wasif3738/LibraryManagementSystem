@@ -55,4 +55,18 @@ router.post('/returns', async (req, res) => {
     }
 });
 
+// **Fix: Fetch all returned books (GET request)**
+router.get('/returns', async (req, res) => {
+    try {
+        const returns = await ReturnStatus.findAll();
+        res.status(200).json(returns);
+    } catch (error) {
+        console.error('Error fetching returned books:', error);
+        res.status(500).json({
+            error: 'Failed to fetch returned books',
+            details: error.message,
+        });
+    }
+});
+
 module.exports = router;
