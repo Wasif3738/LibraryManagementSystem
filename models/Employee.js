@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Branch = require('./Branch'); // Import Branch model
 
 const Employee = sequelize.define(
     'Employee',
@@ -24,11 +25,18 @@ const Employee = sequelize.define(
         Branch_no: {
             type: DataTypes.STRING,
             allowNull: false,
+            references: {
+                model: Branch,
+                key: 'Branch_Id',
+            },
         },
     },
     {
-        timestamps: true, // Enable automatic handling of createdAt and updatedAt
+        timestamps: true,
     }
 );
+
+// Define association
+Employee.belongsTo(Branch, { foreignKey: 'Branch_no' });
 
 module.exports = Employee;

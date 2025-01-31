@@ -3,6 +3,23 @@ const router = express.Router();
 const Employee = require('../models/Employee');
 const Branch = require('../models/Branch'); // Ensure Branch model is imported
 
+// Fetch all employees
+router.get('/employees', async (req, res) => {
+    try {
+        const employees = await Employee.findAll({
+            include: [{ model: Branch, attributes: ['Branch_name', 'Branch_location'] }]
+        });
+
+        res.status(200).json(employees);
+    } catch (error) {
+        console.error('Error fetching employees:', error);
+        res.status(500).json({
+            error: 'Failed to fetch employees',
+            details: error.message,
+        });
+    }
+});
+
 // Add a new employee
 router.post('/employees', async (req, res) => {
     try {
