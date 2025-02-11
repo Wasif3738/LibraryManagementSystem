@@ -105,26 +105,37 @@ router.put('/books/:ISBN', async (req, res) => {
 });
 
 // Route: Delete a book
+// Route: Delete a book
 router.delete('/books/:ISBN', async (req, res) => {
     try {
         const { ISBN } = req.params;
+        console.log(`🛑 DELETE request received for ISBN: ${ISBN}`);
 
+        // Find the book by ISBN
         const book = await Book.findOne({ where: { ISBN } });
 
         if (!book) {
+            console.log(`❌ Book with ISBN ${ISBN} not found.`);
             return res.status(404).json({ error: 'Book not found' });
         }
 
+        console.log(`✅ Book found: ${JSON.stringify(book)}`);
+        console.log(`🔄 Deleting book...`);
+
+        // Delete the book
         await book.destroy();
+
+        console.log(`✅ DELETE successful`);
 
         res.status(200).json({ message: 'Book deleted successfully' });
     } catch (error) {
-        console.error('Error deleting book:', error);
+        console.error('❌ Error deleting book:', error);
         res.status(500).json({
             error: 'Failed to delete book',
             details: error.message,
         });
     }
 });
+
 
 module.exports = router;
