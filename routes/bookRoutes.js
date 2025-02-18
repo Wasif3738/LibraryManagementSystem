@@ -105,7 +105,6 @@ router.put('/books/:ISBN', async (req, res) => {
 });
 
 // Route: Delete a book
-// Route: Delete a book
 router.delete('/books/:ISBN', async (req, res) => {
     try {
         const { ISBN } = req.params;
